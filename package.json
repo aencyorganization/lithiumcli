@@ -1,0 +1,16 @@
+{
+  "name": "lithium-tui",
+  "version": "0.1.0",
+  "description": "Gerenciador TUI de aplicações Kiti & Aency",
+  "main": "src/index.js",
+  "bin": {
+    "lithium": "bin/lithium.js"
+  },
+  "scripts": {
+    "start": "node bin/lithium.js"
+  },
+  "author": "Kiti & Aency",
+  "license": "MIT"
+}
+
+
