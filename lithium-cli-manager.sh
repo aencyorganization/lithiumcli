@@ -33,7 +33,8 @@ ask_name_choice() {
   echo "${prompt}"
   echo "1) ${default}"
   echo "2) ${alt}"
-  read -r -p "Escolha [1/2] (padrão 1): " answer
+  # lê sempre direto do terminal, mesmo quando o script vem de um pipe (curl | bash / wget | bash)
+  read -r -p "Escolha [1/2] (padrão 1): " answer </dev/tty
   case "$answer" in
     2) echo "${alt}" ;;
     *) echo "${default}" ;;
@@ -199,7 +200,8 @@ print_menu() {
 
 main() {
   print_menu
-  read -r -p "Escolha uma opção: " opt
+  # idem: força leitura via /dev/tty para funcionar com curl/wget + pipe
+  read -r -p "Escolha uma opção: " opt </dev/tty
   case "$opt" in
     1)
       install_cli
