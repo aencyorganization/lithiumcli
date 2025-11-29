@@ -62,7 +62,8 @@ function renderUI(state) {
 
   const { modeIndex, focusIndex, message } = state;
   const mode = MODES[modeIndex];
-  const width = process.stdout.columns || 60;
+  const termWidth = process.stdout.columns || 80;
+  const width = Math.max(Math.min(termWidth - 2, 100), 40); // largura interna controlada para manter escala bonita
 
   function padCenter(text) {
     const len = text.length;
@@ -76,7 +77,7 @@ function renderUI(state) {
   const topLeft = `${COLORS.gray}[TAB: modo]${COLORS.reset}`;
   const topRight = `${COLORS.gray}[↑↓: seleção]${COLORS.reset}`;
 
-  const horizontal = '─'.repeat(Math.max(width - 2, 10));
+  const horizontal = '─'.repeat(Math.max(width, 20));
   const topBorder = `┌${horizontal}┐`;
   const bottomBorder = `└${horizontal}┘`;
 
@@ -85,7 +86,7 @@ function renderUI(state) {
     `${COLORS.cyan}${topBorder}${COLORS.reset}`
   );
 
-  const titleLine = padCenter(`${COLORS.bright}Gerenciador TUI - Kiti & Aency${COLORS.reset}`);
+  const titleLine = padCenter(`${COLORS.bright}${COLORS.magenta}Lithium TUI - Kiti & Aency${COLORS.reset}`);
   console.log(`│${titleLine}│`);
 
   // Linha de modo atual
@@ -111,11 +112,9 @@ function renderUI(state) {
     console.log(`│${line}│`);
   }
 
-  printCenteredLine('Controles principais:', COLORS.yellow);
-  printCenteredLine('TAB: alternar modo (Aency / Kiti)', COLORS.gray);
-  printCenteredLine('↑/↓: mover seleção', COLORS.gray);
-  printCenteredLine('ENTER: executar ação', COLORS.gray);
-  printCenteredLine('Q ou ESC: sair', COLORS.gray);
+  // Linha de separação com borda interna
+  const innerSeparator = `├${'─'.repeat(width)}┤`;
+  console.log(`${COLORS.gray}${innerSeparator}${COLORS.reset}`);
   console.log(`│${' '.repeat(width - 2)}│`);
 
   if (mode === 'Aency') {
@@ -126,7 +125,7 @@ function renderUI(state) {
   } else if (mode === 'Kiti') {
     const isSelected = focusIndex === 0;
     printCenteredLine('Aplicações Kiti disponíveis:', COLORS.magenta);
-    const bullet = isSelected ? `${COLORS.bright}▶${COLORS.reset}` : ' ';
+    const bullet = isSelected ? `${COLORS.bright}${COLORS.green}▶${COLORS.reset}` : ' ';
     const itemText = `${bullet} KitiOS Server - Instalar / Gerenciar`;
     printCenteredLine(itemText, isSelected ? COLORS.green : COLORS.reset);
     console.log(`│${' '.repeat(width - 2)}│`);
